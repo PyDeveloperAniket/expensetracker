@@ -72,7 +72,7 @@ export default function DashBoard(props) {
                     ExpenseGuard
                   </h1>
 
-                  <div className="lg:flex lg:flex-col hidden text-center">
+                  <div className="lg:flex lg:flex-col mt-10 hidden text-center">
                     <div className="flex justify-center mt-8">
                       <img
                         src={avatar}
