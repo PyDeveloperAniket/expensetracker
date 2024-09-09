@@ -7,7 +7,7 @@ dotenv.config({ path: ".env" });
 const app = express();
 
 const dbURI = process.env.DATABASE;
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 app.use(express.static("public"));
 app.use(express.json());
