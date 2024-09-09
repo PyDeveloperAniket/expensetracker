@@ -14,7 +14,10 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(Router);
 mongoose
-  .connect(dbURI)
+  .connect(dbURI,{
+    useNewUrlParser: true, 
+    useUnifiedTopology: true 
+  })
   .then((result) => {
     app.listen(port);
     console.log("connected to mongodb and listening at port 5000");
