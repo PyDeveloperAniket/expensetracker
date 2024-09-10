@@ -7,7 +7,7 @@ export default function Profile({ setViewProfile }) {
   const [user, setUser] = useState([]);
   useEffect(() => {
     async function handleGetUser() {
-      const res = await fetch("/user/getProfile");
+      const res = await fetch("https://expense-tracker-backend-1-2ae8.onrender.com/user/getProfile");
       const data = await res.json();
       console.log(data);
       if (data.errors) {

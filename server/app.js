@@ -9,6 +9,13 @@ const app = express();
 const dbURI = process.env.DATABASE;
 const port = process.env.PORT || 5000;
 
+// Allow requests from your frontend (Netlify domain)
+app.use(cors({
+  origin: 'https://lively-crostata-4c97cc.netlify.app', // replace this with your Netlify URL
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Enable if you need to send cookies with requests
+}));
+
 app.use(express.static("public"));
 app.use(express.json());
 app.use(cookieParser());
@@ -23,6 +30,11 @@ mongoose
     console.log("connected to mongodb and listening at port 5000");
   })
   .catch((err) => console.error(err));
+
+
+
+
+
 
 if (process.env.NODE_ENV == "production") {
   app.use(express.static("client/build"));
