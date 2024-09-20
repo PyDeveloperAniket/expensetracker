@@ -13,7 +13,7 @@ export default function DashBoard(props) {
   const [user, setUser] = useState([]);
   useEffect(() => {
     async function handleGetUser() {
-      const res = await fetch("https://expense-tracker-backend-1-2ae8.onrender.com/user/getProfile");
+      const res = await fetch("/user/getProfile");
       const data = await res.json();
       console.log(data);
       if (data.errors) {
@@ -40,14 +40,14 @@ export default function DashBoard(props) {
   }
 
   const handleLogOut = async () => {
-    const res = await fetch("https://expense-tracker-backend-1-2ae8.onrender.com/user/logout");
+    const res = await fetch("/user/logout");
     props.setIsLoggedIn(false);
     navigate("/");
   };
 
   useEffect(() => {
     const checklogin = async () => {
-      const res = await fetch("https://expense-tracker-backend-1-2ae8.onrender.com/user/auth");
+      const res = await fetch("/user/auth");
       const data = await res.json();
 
       if (data.msg == "User Login Found") {

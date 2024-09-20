@@ -4,17 +4,17 @@ import { Segregator } from "../utilities/Categorysegregator";
 import DoughnutChart from "./DoughnutChart";
 import Investment from "../assets/Investment.svg";
 
-let total = 0;
+let total = 0; // Global variable to store total expenses
 
 export default function Daily() {
-  const navigate = useNavigate();
-  const [haveSpent, setHaveSpent] = useState(true);
+  const navigate = useNavigate(); // Hook for programmatic navigation
+  const [haveSpent, setHaveSpent] = useState(true); // State to track if there are any expenses
   const [expenseData, SetExpenseData] = useState({
     datasets: [
       {
-        label: "Expense",
-        data: [],
-        borderColor: "black",
+        label: "Expense", // Label for the dataset
+        data: [], // Data for the chart
+        borderColor: "black", // Border color for the chart
         backgroundColor: [
           "rgba(255, 99, 132, 0.4)",
           "rgba(255, 159, 64, 0.4)",
@@ -23,33 +23,41 @@ export default function Daily() {
           "rgba(54, 162, 235, 0.4)",
           "rgba(153, 102, 255, 0.4)",
           "rgba(201, 203, 207, 0.4)",
-        ],
+        ], // Background colors for the chart slices
       },
     ],
-    labels: [],
+    labels: [], // Labels for the chart
   });
 
   useEffect(() => {
+    // Function to fetch daily expense data
     async function fetchDailyData() {
-      const res = await fetch("/expense/getdailyexpense");
-      const data = await res.json();
-      console.log(data);
+      const res = await fetch("/expense/getdailyexpense"); // Fetch daily expenses
+      const data = await res.json(); // Parse JSON response
+      console.log(data); // Log the data for debugging
+      
       if (data.error) {
+        // Redirect to home if there's an error
         navigate("/");
       } else {
-        const Segregated = Segregator(data.filterData);
+        const Segregated = Segregator(data.filterData); // Process data using Segregator utility
+        
+        // Check if there are any expenses
         if (Segregated[1] === 0) {
-          setHaveSpent(false);
+          setHaveSpent(false); // No expenses
         } else {
-          setHaveSpent(true);
+          setHaveSpent(true); // Expenses present
         }
-        total = Segregated[1];
+
+        total = Segregated[1]; // Update total expense
+
+        // Update expense data for the chart
         SetExpenseData({
           datasets: [
             {
               label: "Expense",
-              data: Object.values(Segregated[0]),
-              borderColor: "black",
+              data: Object.values(Segregated[0]), // Chart data values
+              borderColor: "black", // Border color for chart
               backgroundColor: [
                 "rgba(255, 99, 132, 0.4)",
                 "rgba(255, 159, 64, 0.4)",
@@ -58,7 +66,7 @@ export default function Daily() {
                 "rgba(54, 162, 235, 0.4)",
                 "rgba(153, 102, 255, 0.4)",
                 "rgba(201, 203, 207, 0.4)",
-              ],
+              ], // Slice colors
               borderColor: [
                 "rgb(255, 99, 132)",
                 "rgb(255, 159, 64)",
@@ -67,31 +75,33 @@ export default function Daily() {
                 "rgb(54, 162, 235)",
                 "rgb(153, 102, 255)",
                 "rgb(201, 203, 207)",
-              ],
-              borderWidth: 1,
+              ], // Border colors for slices
+              borderWidth: 1, // Border width
             },
           ],
-          labels: Object.keys(Segregated[0]),
+          labels: Object.keys(Segregated[0]), // Chart labels
         });
       }
     }
-    fetchDailyData();
-  }, []);
+
+    fetchDailyData(); // Fetch daily data when component mounts
+  }, []); // Empty dependency array means this useEffect runs once after initial render
+
   return (
     <div className="pt-2 lg:pt-0 pb-10 lg:pb-0 bg-black">
-      <div className="bg-black lg:w-3/4 w-[86%] p-5 flex lg:m-auto ml-5 lg:mt-28  rounded-md justify-center">
+      <div className="bg-black lg:w-3/4 w-[86%] p-5 flex lg:m-auto ml-5 lg:mt-28 rounded-md justify-center">
         <h1 className="font-bold text-xl font-lexand text-white mr-3 mt-3">
           Today's Expense
         </h1>
         <span className="font-bold text-2xl font-lexend text-white bg-gray-700 p-3 rounded-md">
-          {total}
+          {total} {/* Display total expenses */}
         </span>
       </div>
-      <div className="lg:w-3/4 w-[86%] mx-5 lg:mt-3 mt-4 p-5 lg:m-auto bg-black rounded-lg ">
+      <div className="lg:w-3/4 w-[86%] mx-5 lg:mt-3 mt-4 p-5 lg:m-auto bg-black rounded-lg">
         {haveSpent ? (
-          <DoughnutChart chartData={expenseData} />
+          <DoughnutChart chartData={expenseData} /> // Display chart if there are expenses
         ) : (
-          <img className="p-5 h-5/6 m-6" src={Investment} alt="join now" />
+          <img className="p-5 h-5/6 m-6" src={Investment} alt="join now" /> // Display image if no expenses
         )}
       </div>
     </div>

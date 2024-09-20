@@ -14,6 +14,7 @@ import MainSpendAnalysis from "./Pages/MainSpendAnalysis";
 import MainDaily from "./Pages/MainDaily";
 import ConfirmDelete from "./Pages/ConfirmDelete";
 import { Scrollbars } from "react-custom-scrollbars";
+import Error from "./Error";
 
 Modal.setAppElement("#root");
 
@@ -171,10 +172,18 @@ function App() {
                   openModalConfirm={openModalConfirm}
                 />
               }
-            ></Route>
+            >
+            </Route>
           </Route>
 
+          <Route path="*" element={<Error/>} />
+
         </Routes>
+
+
+
+
+
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={closeModalSignup}
@@ -270,7 +279,7 @@ function App() {
           closeModalSignup={closeModalSignup}
           openModalLogin={openModalLogin}
         />
-      </Modal>
+      </Modal>  
 
       <Modal
         isOpen={modalIsOpenLogin}

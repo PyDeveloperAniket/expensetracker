@@ -5,9 +5,10 @@ import ReactLoading from "react-loading";
 import { Scrollbars } from "react-custom-scrollbars";
 
 const AddExpense = (props) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // State to manage loading spinner visibility
+  const navigate = useNavigate(); // Hook for programmatic navigation
 
-  const navigate = useNavigate();
+  // State to manage the expense form data
   const [expense, setExpense] = useState({
     amount: "",
     desc: "",
@@ -15,16 +16,20 @@ const AddExpense = (props) => {
     category: "General",
   });
 
+  // State to manage validation error messages
   const [error, setError] = useState({
     amount: "",
     desc: "",
   });
 
+  // Function to handle the submission of the expense form
   const handleAddExpense = async (e) => {
-    setIsLoading(true);
+    setIsLoading(true); // Show loading spinner
     setError({
-      msg: "",
+      msg: "", // Clear previous error messages
     });
+
+    // Send POST request to the server with expense data
     const res = await fetch("/expense/addexpense", {
       method: "POST",
       headers: {
@@ -32,60 +37,58 @@ const AddExpense = (props) => {
       },
       body: JSON.stringify(expense),
     });
-    const data = await res.json();
+
+    const data = await res.json(); // Parse JSON response
+
     if (data.errors) {
-      setIsLoading(false);
-      setError(data.errors);
-      console.log(data.errors);
+      setIsLoading(false); // Hide loading spinner
+      setError(data.errors); // Set validation errors
+      console.log(data.errors); // Log errors for debugging
     } else {
-      setIsLoading(false);
-      props.closeModalExpense();
-      navigate("/dashboard");
-      window.location.reload();
+      setIsLoading(false); // Hide loading spinner
+      props.closeModalExpense(); // Close the modal
+      navigate("/dashboard"); // Redirect to dashboard
+      window.location.reload(); // Reload the page to reflect changes
     }
   };
 
   return (
     <Scrollbars style={{ width: 540, height: 500 }} className="mt-8 bg-black">
-      <div className=" grid grid-cols-6 font-lexend bg-black ">
-        <div className="col-span-4 bg-black p-6 ">
-          <div className=" flex mt-4 ">
-            <h1 className="text-white text-2xl font-bold ">Where you Spend Money</h1>
+      <div className="grid grid-cols-6 font-lexend bg-black">
+        <div className="col-span-4 bg-black p-6">
+          <div className="flex mt-4">
+            <h1 className="text-white text-2xl font-bold">Where you Spend Money</h1>
           </div>
-          <div className=" text-jp-white flex mt-4 ">
+          <div className="text-jp-white flex mt-4">
             <h1 className="text-4xl border-b-2 mt-2">₹</h1>
             <input
-              className="p-3 bg-black text-3xl w-3/4 border-b-2 outline-none "
+              className="p-3 bg-black text-3xl w-3/4 border-b-2 outline-none"
               placeholder="0"
               type="number"
               value={expense.amount}
               onChange={(e) => {
-                const tempExpense = { ...expense };
-                tempExpense.amount = e.target.value;
-                setExpense(tempExpense);
+                setExpense(prev => ({ ...prev, amount: e.target.value })); // Update amount in expense state
               }}
-            ></input>
+            />
           </div>
           <span className="pt-1 text-sm text-red-500 font-lexend">
-            {error.msg}
+            {error.msg} {/* Display error message if any */}
           </span>
           <div>
             <input
-              className="p-3 px-4 rounded-md mt-6  w-3/4 placeholder-gray-200 bg-gray-700 outline-none text-jp-white"
+              className="p-3 px-4 rounded-md mt-6 w-3/4 placeholder-gray-200 bg-gray-700 outline-none text-jp-white"
               placeholder="reason of spending ?"
               value={expense.desc}
               onChange={(e) => {
-                const tempExpense = { ...expense };
-                tempExpense.desc = e.target.value;
-                setExpense(tempExpense);
+                setExpense(prev => ({ ...prev, desc: e.target.value })); // Update description in expense state
               }}
-            ></input>
-          </div>
-          <div className="">
-            <DatePicker2 expense={expense} setExpense={setExpense} />
+            />
           </div>
           <div>
-            <h1 className="text-jp-slate font-bold  mt-4">Category</h1>
+            <DatePicker2 expense={expense} setExpense={setExpense} /> {/* Date picker component */}
+          </div>
+          <div>
+            <h1 className="text-jp-slate font-bold mt-4">Category</h1>
           </div>
           <div className="text-black">
             <select
@@ -94,9 +97,7 @@ const AddExpense = (props) => {
               id="categories"
               value={expense.category}
               onChange={(e) => {
-                const tempExpense = { ...expense };
-                tempExpense.category = e.target.value;
-                setExpense(tempExpense);
+                setExpense(prev => ({ ...prev, category: e.target.value })); // Update category in expense state
               }}
             >
               <option value="General">General</option>
@@ -116,7 +117,7 @@ const AddExpense = (props) => {
                 color="#F5A302"
                 height={50}
                 width={50}
-              />
+              /> 
             ) : (
               <button
                 onClick={handleAddExpense}

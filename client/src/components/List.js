@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Money from "../assets/money.png";
-
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 
+// List component displays individual expense items
 export default function List(props) {
   const navigate = useNavigate();
+
+  // Function to handle the setup for deleting an expense
   const HandleSetUp = () => {
-    props.setDeleteId(props.expense._id);
-    props.openModalConfirm();
+    props.setDeleteId(props.expense._id); // Set the ID of the expense to be deleted
+    props.openModalConfirm(); // Open the confirmation modal
   };
+
   return (
-    <div className="m-2 mt-4 lg:mt-0 mx-4 lg:mx-0 p-2  lg:grid lg:grid-cols-7  text-white bg-black lg:p-4 lg:m-6 lg:w-[90%] w-[65%] flex">
+    <div className="m-2 mt-4 lg:mt-0 mx-4 lg:mx-0 p-2 lg:grid lg:grid-cols-7 text-white bg-black lg:p-4 lg:m-6 lg:w-[90%] w-[65%] flex">
+      {/* Delete icon, triggers HandleSetUp function on click */}
       <div
         onClick={HandleSetUp}
         className="text-white absolute cursor-pointer"
@@ -29,12 +33,17 @@ export default function List(props) {
           />
         </svg>
       </div>
-      <div className="bg-gray-700 rounded-full lg:w-2/3 w-fit  h-12 relative top-3 p-2 mb-8 lg:mb-3">
-        <img src={Money} className="h-7 w-7 mt-1"></img>
+
+      {/* Money icon */}
+      <div className="bg-gray-700 rounded-full lg:w-2/3 w-fit h-12 relative top-3 p-2 mb-8 lg:mb-3">
+        <img src={Money} className="h-7 w-7 mt-1" alt="Money Icon" />
       </div>
-      <div className="lg:col-span-4 ml-3 lg:ml-0 mt-2 lg:mt-2 ">
+
+      {/* Expense details */}
+      <div className="lg:col-span-4 ml-3 lg:ml-0 mt-2 lg:mt-2">
         <div className="flex">
-          <div className="flex text-gray-200 bg-gray-700 rounded-xl w-fit px-2 py-1 ">
+          {/* Date */}
+          <div className="flex text-gray-200 bg-gray-700 rounded-xl w-fit px-2 py-1">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -47,21 +56,27 @@ export default function List(props) {
                 clipRule="evenodd"
               />
             </svg>
-            <p className="text-sm  ml-1">
-              {moment(props.expense.date).format("MMM D")}
+            <p className="text-sm ml-1">
+              {moment(props.expense.date).format("MMM D")} {/* Format date */}
             </p>
           </div>
-          <div className="flex text-gray-200 bg-gray-700 rounded-xl w-fit px-2 py-1 ml-3 ">
-            <p className="text-sm  ml-1">{props.expense.category}</p>
+
+          {/* Category */}
+          <div className="flex text-gray-200 bg-gray-700 rounded-xl w-fit px-2 py-1 ml-3">
+            <p className="text-sm ml-1">{props.expense.category}</p>
           </div>
         </div>
-        <div className="lg:mt-1  mt-2 ">
+
+        {/* Description */}
+        <div className="lg:mt-1 mt-2">
           <h1 className="font-bold">{props.expense.desc}</h1>
         </div>
       </div>
-      <div className="lg:col-span-2 lg:ml-6 ml-3 lg:mt-0 mt-2 ">
+
+      {/* Amount */}
+      <div className="lg:col-span-2 lg:ml-6 ml-3 lg:mt-0 mt-2">
         <p className="text-sm font-bold">Amount</p>
-        <div className="flex font-bold text-jp-white lg:mt-2 lg:mx-0 mx-4 ">
+        <div className="flex font-bold text-jp-white lg:mt-2 lg:mx-0 mx-4">
           <p>₹</p>
           <h1 className="ml-1">{props.expense.amount.$numberDecimal}</h1>
         </div>

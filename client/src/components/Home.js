@@ -10,8 +10,8 @@ let TotalSpent = 0;
 
 export default function Home(props) {
   const navigate = useNavigate();
-  const [totalBudget, setTotalBudget] = useState();
-  const [tooltip, showTooltip] = useState(true);
+  const [totalBudget, setTotalBudget] = useState(); // Stores total budget value
+  const [tooltip, showTooltip] = useState(true); // Controls tooltip visibility
   const [expenseData, SetExpenseData] = useState({
     datasets: [
       {
@@ -48,7 +48,9 @@ export default function Home(props) {
       },
     ],
   });
+
   useEffect(() => {
+    // Defines start and end dates for fetching data
     const startDate = new Date();
     const date = {
       startdate: new Date(
@@ -63,7 +65,9 @@ export default function Home(props) {
       ).toDateString(),
     };
     console.log(date);
-    const getHomeChartdata = async (e) => {
+
+    // Function to fetch expense data and update chart
+    const getHomeChartdata = async () => {
       const res = await fetch("/expense/viewexpenseinrange", {
         method: "POST",
         headers: {
@@ -77,6 +81,7 @@ export default function Home(props) {
       if (data.errors) {
         navigate("/");
       } else {
+        // Segregate expenses by category
         const Segregated = Segregator(data.expense);
         TotalSpent = Segregated[1];
         SetExpenseData({
@@ -110,6 +115,8 @@ export default function Home(props) {
         });
       }
     };
+
+    // Function to fetch budget data and update chart
     async function handleGetBudget() {
       const res = await fetch("/expense/getBudget");
       let data = await res.json();
@@ -134,17 +141,17 @@ export default function Home(props) {
         });
       }
     }
+
+    // Fetch data on component mount
     handleGetBudget();
     getHomeChartdata();
   }, []);
 
   return (
     <div className="lg:mt-10 mt-0 py-6 lg:py-0">
-      <div className="lg:m-auto lg:ml-auto ml-4  lg:w-3/4 p-5 mx-8 rounded-md  lg:mt-8 bg-black text-white">
+      <div className="lg:m-auto lg:ml-auto ml-4 lg:w-3/4 p-5 mx-8 rounded-md lg:mt-8 bg-black text-white">
         <div className="flex justify-between text-md">
-          <p>
-            {moment().format("MMM D")}
-          </p>
+          <p>{moment().format("MMM D")}</p>
         </div>
         <div className="flex justify-between items-center">
           <div className="flex">
@@ -162,7 +169,7 @@ export default function Home(props) {
               }}
             >
               <span className="inline-block mt-2 cursor-pointer">
-                <img className="ml-2 w-5" src={Popup}></img>
+                <img className="ml-2 w-5" src={Popup} alt="Set Income" />
               </span>
             </button>
             {tooltip ? (
@@ -173,9 +180,8 @@ export default function Home(props) {
             <DoughnutChart chartData={monthlyBudget} />
           </div>
         </div>
-        <div></div>
       </div>
-      <div className="bg-black rounded-md lg:p-5 p-3  lg:m-auto lg:mt-4 mt-4 lg:w-3/4 mx-6 ml-3 cursor-pointer">
+      <div className="bg-black rounded-md lg:p-5 p-3 lg:m-auto lg:mt-4 mt-4 lg:w-3/4 mx-6 ml-3 cursor-pointer">
         <DoughnutChart chartData={expenseData} />
       </div>
       <Link to="dailyspendanalysis">

@@ -13,6 +13,6 @@ authRouter.post("/login", login);
 authRouter.post("/signup", signup);
 authRouter.get("/auth", auth);
 authRouter.get("/getprofile", requireAuth, getuser);
-authRouter.get("/logout", logout);
+authRouter.get("/logout",requireAuth, logout);
 
 module.exports = authRouter;
