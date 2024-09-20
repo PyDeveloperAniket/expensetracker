@@ -27,14 +27,6 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// json web token
-// userSchema.methods.generateToken = async function () {
-//   try {
-//     return;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
 
 // Middleware to hash password before saving the user
 userSchema.pre("save", async function (next) {
